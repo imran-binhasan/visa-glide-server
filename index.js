@@ -27,7 +27,7 @@ async function run() {
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
 
     app.get('/', async(req,res)=>{
-        res.send('Server is running ...')
+        res.send('Server is running ....')
     })
 
 
