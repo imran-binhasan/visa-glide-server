@@ -52,10 +52,21 @@ async function run() {
       res.send(result);
     })
 
+
     app.get('/applications',async (req,res)=>{
       const result = await visaApplications.find().toArray();
       res.send(result)
     })
+
+
+    app.get('/applications/:uid', async(req,res)=>{
+      const uid = req.params;
+      console.log(uid)
+      const result = await visaApplications.find(uid).toArray();
+      res.send(result)
+    })
+
+
 
     app.post('/users',async(req, res)=> {
       const query = req.body;
@@ -79,8 +90,6 @@ async function run() {
       res.send(result);
       console.log(result)
     })
-
-
 
 
   } finally {
