@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors')
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const { configDotenv } = require('dotenv');
 configDotenv()
 
@@ -29,17 +29,31 @@ async function run() {
     const database = client.db('visa-glide-db');
     const userlist = database.collection('userlist')
     const visalist = database.collection('visalist')
+    const visaApplications = database.collection('visa-applications')
     app.get('/', async(req,res)=>{
         res.send('Server is running ....')
     })
 
     app.get('/users',async(req, res)=> {
       const result = await userlist.find().toArray();
-      res.send(result)
+      res.send(result);
     })
 
     app.get('/visas', async(req, res)=> {
       const result = await visalist.find().toArray();
+      res.send(result)
+      console.log(result)
+    })
+
+    app.get('/visas/:id',async (req, res)=>{
+      const id = req.params.id;
+      const query = {_id:new ObjectId(id)}
+      const result = await visalist.findOne(query);
+      res.send(result);
+    })
+
+    app.get('/applications',async (req,res)=>{
+      const result = await visaApplications.find().toArray();
       res.send(result)
     })
 
@@ -58,6 +72,13 @@ async function run() {
     
     })
 
+    app.post('/applications',async(req,res)=>{
+      const query = req.body;
+      console.log(query)
+      const result = await visaApplications.insertOne(query);
+      res.send(result);
+      console.log(result)
+    })
 
 
 
