@@ -28,8 +28,19 @@ async function run() {
 
     const database = client.db('visa-glide-db');
     const userlist = database.collection('userlist')
+    const visalist = database.collection('visalist')
     app.get('/', async(req,res)=>{
         res.send('Server is running ....')
+    })
+
+    app.get('/users',async(req, res)=> {
+      const result = await userlist.find().toArray();
+      res.send(result)
+    })
+
+    app.get('/visas', async(req, res)=> {
+      const result = await visalist.find().toArray();
+      res.send(result)
     })
 
     app.post('/users',async(req, res)=> {
@@ -37,6 +48,14 @@ async function run() {
       const result = await userlist.insertOne(query)
       res.send(result)
       console.log(result)
+    })
+
+    app.post('/visas',async(req, res)=> {
+      const query = req.body;
+      const result = await visalist.insertOne(query);
+      res.send(result)
+      console.log(result)
+    
     })
 
 
