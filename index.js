@@ -42,10 +42,9 @@ async function run() {
     app.get('/visas', async(req, res)=> {
       const result = await visalist.find().toArray();
       res.send(result)
-      console.log(result)
     })
 
-    app.get('/visas/:id',async (req, res)=>{
+    app.get('/visa/:id',async (req, res)=>{
       const id = req.params.id;
       const query = {_id:new ObjectId(id)}
       const result = await visalist.findOne(query);
@@ -61,7 +60,6 @@ async function run() {
 
     app.get('/applications/:uid', async(req,res)=>{
       const uid = req.params;
-      console.log(uid)
       const result = await visaApplications.find(uid).toArray();
       res.send(result)
     })
@@ -87,6 +85,46 @@ async function run() {
       const query = req.body;
       console.log(query)
       const result = await visaApplications.insertOne(query);
+      res.send(result);
+      console.log(result)
+    })
+
+    app.put('/visa/:id', async (req, res) => {
+      const id = req.params.id;
+      const data = req.body;
+      console.log(data);  // Check that data includes applicationMethods
+    
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updateData = {
+        $set: {
+          countryName: data.countryName,
+          countryImage: data.countryImage,
+          visaType: data.visaType,
+          processingTime: data.processingTime,
+          fee: data.fee,
+          validity: data.validity,
+          applicationMethods: data.applicationMethods, // Correct field name
+        },
+      };
+    
+      const result = await visalist.updateOne(filter, updateData, options);
+      res.send(result);
+    });
+    
+
+    app.delete('/visa/:id',async (req,res)=> {
+      const id = req.params.id;
+      const query = {_id:new ObjectId(id)}
+      const result = await visalist.deleteOne(query);
+      res.send(result);
+      console.log(result)
+    })
+
+    app.delete('/application/:id',async (req,res)=> {
+      const id = req.params.id;
+      const query = {_id:new ObjectId(id)}
+      const result = await visaApplications.deleteOne(query);
       res.send(result);
       console.log(result)
     })
