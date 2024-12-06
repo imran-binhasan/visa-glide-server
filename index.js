@@ -26,8 +26,17 @@ async function run() {
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
 
+    const database = client.db('visa-glide-db');
+    const userlist = database.collection('userlist')
     app.get('/', async(req,res)=>{
         res.send('Server is running ....')
+    })
+
+    app.post('/users',async(req, res)=> {
+      const query = req.body;
+      const result = await userlist.insertOne(query)
+      res.send(result)
+      console.log(result)
     })
 
 
