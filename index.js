@@ -22,9 +22,9 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    await client.connect();
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    // await client.connect();
+    // await client.db("admin").command({ ping: 1 });
+    // console.log("Pinged your deployment. You successfully connected to MongoDB!");
 
     const database = client.db('visa-glide-db');
     const userlist = database.collection('userlist')
@@ -46,7 +46,6 @@ async function run() {
 
     app.get('/visas/:num', async(req, res)=> {
       const max = parseInt(req.params.num);
-      console.log(max)
       const result = await visalist.find().sort({ _id: -1 }).limit(max).toArray()
       res.send(result)
       console.log(result)
