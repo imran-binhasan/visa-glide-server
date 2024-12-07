@@ -44,6 +44,14 @@ async function run() {
       res.send(result)
     })
 
+    app.get('/visas/:num', async(req, res)=> {
+      const max = parseInt(req.params.num);
+      console.log(max)
+      const result = await visalist.find().sort({ _id: -1 }).limit(max).toArray()
+      res.send(result)
+      console.log(result)
+    })
+
     app.get('/visa/:id',async (req, res)=>{
       const id = req.params.id;
       const query = {_id:new ObjectId(id)}
@@ -77,6 +85,7 @@ async function run() {
       const query = req.body;
       const result = await visalist.insertOne(query);
       res.send(result)
+      console.log(query)
       console.log(result)
     
     })
